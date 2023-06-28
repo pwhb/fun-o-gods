@@ -1,8 +1,6 @@
 import { DB_NAME } from "$env/static/private";
 import DBKeys from "$lib/consts/DBKeys";
-import type { IUpload } from "$lib/models/upload";
 import clientPromise from "$lib/mongodb";
-import { get, remove } from "$lib/s3";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { ObjectId } from "mongodb";
 
@@ -12,17 +10,18 @@ export const GET: RequestHandler = async ({ params }) =>
     {
         const { id } = params;
         const client = await clientPromise;
-        const col = client.db(DB_NAME).collection(DBKeys.UploadCollection);
-        const doc = await col.findOne({ _id: new ObjectId(id) }) as IUpload;
+        const col = client.db(DB_NAME).collection(DBKeys.ConfigCollection);
+        const doc = await col.findOne({
+            $or: [
+                { _id: ObjectId.isValid(id as string) ? new ObjectId(id) : new ObjectId() },
+                { name: id }
+            ]
+        });
         if (!doc)
         {
             return json({ success: false, error: "not found" }, { status: 404 });
         }
-        const res = (await get(doc.Key)) as any;
-
-        return new Response(res?.Body, {
-            headers: { 'Content-Type': res?.ContentType }
-        });
+        return json({ success: true, data: doc }, { status: 200 });
     } catch (err)
     {
         console.error(err);
@@ -30,20 +29,22 @@ export const GET: RequestHandler = async ({ params }) =>
     }
 };
 
-export const DELETE: RequestHandler = async ({ params }) =>
+export const PATCH: RequestHandler = async ({ request, params }) =>
 {
     try
     {
         const { id } = params;
+        const body = await request.json();
         const client = await clientPromise;
-        const col = client.db(DB_NAME).collection(DBKeys.UploadCollection);
-        const doc = await col.findOne({ _id: new ObjectId(id) }) as IUpload;
-        const res = await remove(doc.Key);
-        const dbRes = await col.deleteOne({ _id: new ObjectId(id) });
+        const col = client.db(DB_NAME).collection(DBKeys.ConfigCollection);
+        const dbRes = await col.updateOne({ _id: new ObjectId(id) }, {
+            $set: {
+                ...body,
+                updatedAt: new Date()
+            }
+        });
 
-        console.log({ res, dbRes });
-
-        return json({ success: true });
+        return json({ success: true, data: dbRes });
     } catch (err)
     {
         console.error(err);

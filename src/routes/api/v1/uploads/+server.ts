@@ -4,12 +4,17 @@ import clientPromise from "$lib/mongodb";
 import { list, upload } from "$lib/s3";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
-export const GET: RequestHandler = async ({ }) =>
+export const GET: RequestHandler = async ({ url }) =>
 {
     try
     {
-        const res = await list();
-        return json({ success: true, data: res }, { status: 201 });
+        const filter: any = getQuery(url.searchParams);
+
+        const aws = await list();
+        const client = await clientPromise;
+        const col = client.db(DB_NAME).collection(DBKeys.UploadCollection);
+        const docs = await col.find(filter).toArray();
+        return json({ success: true, data: docs, aws: aws?.Contents, total1: docs.length, total2: aws }, { status: 201 });
     } catch (err)
     {
         console.error(err);
@@ -42,6 +47,7 @@ export const POST: RequestHandler = async ({ request }) =>
         const col = client.db(DB_NAME).collection(DBKeys.UploadCollection);
         const dbRes = await col.insertOne({
             Key: Key,
+            active: true,
             createdAt: new Date(),
             updatedAt: new Date()
         });
