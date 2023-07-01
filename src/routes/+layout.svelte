@@ -6,5 +6,7 @@
 	const options = {};
 </script>
 
-<slot />
-<SvelteToast {options} />
+<main data-theme="cupcake" class="h-screen bg-base-300">
+	<slot />
+	<SvelteToast {options} />
+</main>

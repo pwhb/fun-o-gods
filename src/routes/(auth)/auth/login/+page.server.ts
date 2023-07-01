@@ -36,11 +36,12 @@ const login: Action = async ({ request, cookies }) =>
         invalid.username = 'user does not exist';
         return fail(400, { invalid, previous });
     }
-    if (!alreadyExists.activated)
+    if (!alreadyExists.active)
     {
         invalid.username = 'user is not activated';
         return fail(400, { invalid, previous });
     }
+
     const isCorrect = await verify(alreadyExists.password, password as string);
 
     if (!isCorrect)
@@ -50,8 +51,7 @@ const login: Action = async ({ request, cookies }) =>
     }
 
     const token = getJwt({
-        username: alreadyExists.username,
-        role: alreadyExists.role
+        id: alreadyExists._id
     });
 
     cookies.set("token", token, {

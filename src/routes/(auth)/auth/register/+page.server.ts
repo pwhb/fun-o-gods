@@ -5,7 +5,7 @@ import { hash } from 'argon2';
 import { DB_NAME } from "$env/static/private";
 import DBKeys from "$lib/consts/DBKeys";
 import { validateRegister } from "$lib/validators/auth";
-import { getJwt } from "$lib/jwt";
+// import { getJwt } from "$lib/jwt";
 
 export const load: PageServerLoad = async ({ locals }) =>
 {

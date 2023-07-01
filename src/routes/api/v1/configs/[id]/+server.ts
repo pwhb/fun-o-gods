@@ -29,7 +29,7 @@ export const GET: RequestHandler = async ({ params }) =>
     }
 };
 
-export const PATCH: RequestHandler = async ({ request, params }) =>
+export const PUT: RequestHandler = async ({ request, params }) =>
 {
     try
     {
@@ -39,7 +39,8 @@ export const PATCH: RequestHandler = async ({ request, params }) =>
         const col = client.db(DB_NAME).collection(DBKeys.ConfigCollection);
         const dbRes = await col.updateOne({ _id: new ObjectId(id) }, {
             $set: {
-                ...body,
+                name: body.name,
+                config: body.config,
                 updatedAt: new Date()
             }
         });

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import AuthWrapper from '$lib/components/wrappers/auth_wrapper.svelte';
+	import PlaceholderKeys from '$lib/consts/PlaceholderKeys';
 	import type { ActionData } from './$types';
 	export let form: ActionData;
 	let showPassword = false;
@@ -15,7 +16,7 @@
 			type="text"
 			id="username"
 			name="username"
-			placeholder="anakin"
+			placeholder={PlaceholderKeys.username}
 			class={`input input-bordered ${form?.invalid?.username ? 'input-error' : ''}`}
 			value={form?.previous?.username || ''}
 		/>

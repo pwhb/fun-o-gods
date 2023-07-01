@@ -26,10 +26,12 @@ export const POST: RequestHandler = async ({ request }) =>
         const body = await request.json();
         const client = await clientPromise;
         const col = client.db(DB_NAME).collection(DBKeys.RoleCollection);
+        console.log({ body });
 
         const dbRes = await col.insertOne({
             name: body.name,
             level: body.level,
+            active: !!body.active ? body.active : false,
             createdAt: new Date(),
             updatedAt: new Date(),
         });

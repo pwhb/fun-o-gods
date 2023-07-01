@@ -4,6 +4,7 @@ import { decodeJwt } from '$lib/jwt';
 import clientPromise from '$lib/mongodb';
 import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
+import { ObjectId } from 'mongodb';
 
 const authMiddleware: Handle = async ({ event, resolve }) =>
 {
@@ -32,49 +33,43 @@ const authMiddleware: Handle = async ({ event, resolve }) =>
 		return await resolve(event);
 	}
 
-	// try
-	// {
-	// 	const client = await clientPromise;
-	// 	const db = client.db(DB_NAME);
-	// 	const col = db.collection('users');
+	try
+	{
+		const client = await clientPromise;
+		const db = client.db(DB_NAME);
+		const col = db.collection('users');
+		const pipeline = [
+			{ $match: { _id: new ObjectId(decoded.id) } },
+			{
+				$lookup: {
+					from: 'roles',
+					localField: 'role',
+					foreignField: 'name',
+					as: 'roleInfo'
+				}
+			},
+			{
+				$addFields: {
+					roleInfo: { $arrayElemAt: ['$roleInfo', 0] }
+				}
+			},
+			{
+				$project: {
+					username: 1,
+					role: 1,
+					"roleInfo.level": 1
+				}
+			},
+			{ $limit: 1 }
+		];
+		const user = (await col.aggregate(pipeline).toArray())[0] as any;
 
-	// 	// const user = (await col.findOne(
-	// 	// 	{ username: decoded.user.username },
-	// 	// 	{ projection: { username: 1, role: 1, avatar: 1, penName: 1 } }
-	// 	// )) as any;
-	// 	const pipeline = [
-	// 		{ $match: { username: decoded.user.username } },
-	// 		{
-	// 			$lookup: {
-	// 				from: 'roles',
-	// 				localField: 'role',
-	// 				foreignField: 'name',
-	// 				as: 'role'
-	// 			}
-	// 		},
-	// 		{
-	// 			$unwind: '$role'
-	// 		},
-	// 		{
-	// 			$project: {
-	// 				username: 1,
-	// 				avatar: 1,
-	// 				penName: 1,
-	// 				'role.details': 1,
-	// 				'role.name': 1
-	// 			}
-	// 		},
-	// 		{ $limit: 1 }
-	// 	];
-	// 	const user = (await col.aggregate(pipeline).toArray())[0] as any;
+		event.locals.user = user;
+	} catch (err)
+	{
+		console.error(err);
+	}
 
-
-	// } catch (err)
-	// {
-	// 	console.error(err);
-	// }
-
-	event.locals.user = decoded;
 
 	return await resolve(event);
 };
