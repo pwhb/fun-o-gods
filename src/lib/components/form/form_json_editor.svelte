@@ -4,7 +4,7 @@
 	export let name = '';
 	export let label = '';
 	export let content = {
-		text: null,
+		text: undefined,
 		json: {}
 	};
 </script>

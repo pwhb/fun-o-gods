@@ -1,8 +1,12 @@
 <script>
 	import { page } from '$app/stores';
 	import Icon from '@iconify/svelte';
-	const { accessConfig, user } = $page.data;
-	const menuItems = accessConfig.config.menuItems;
+	const { user, menuItems } = $page.data;
+
+	console.log({
+		access: menuItems[0].access,
+		role: user.role
+	});
 </script>
 
 <div class="grid grid-cols-2 gap-4">

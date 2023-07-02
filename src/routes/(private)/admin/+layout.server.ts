@@ -13,15 +13,22 @@ export const load: LayoutServerLoad = async ({ locals }) =>
         throw redirect(302, '/auth/login');
     }
 
+    if (locals.user.role === 'guest')
+    {
+        throw redirect(302, '/home');
+    }
+
     const client = await clientPromise;
     const db = client.db(DB_NAME);
-    const accessConfig = await db
-        .collection(DBKeys.ConfigCollection)
-        .findOne({ name: "access" }, {
-            projection: {}
-        });
-    return {
+    const entities = await db.collection(DBKeys.EntityCollection).find({}, {
+        projection: {
+            name: 1,
+            icon: 1,
+            access: "$config.operations.read"
+        }
+    }).toArray();
 
-        accessConfig: serialize(accessConfig)
+    return {
+        menuItems: serialize(entities)
     };
 };

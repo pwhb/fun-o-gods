@@ -31,3 +31,8 @@ export interface IConfigForm
     name: string;
     config: any;
 }
+
+export interface IEntityForm extends IConfigForm
+{
+    icon: string;
+}

@@ -2,8 +2,7 @@
 	import { page } from '$app/stores';
 	import LogoutButton from '../common/logout_button.svelte';
 	import Icon from '@iconify/svelte';
-	const { user, publicConfig, accessConfig } = $page.data;
-	const menuItems = accessConfig.config.menuItems;
+	const { user, publicConfig, menuItems } = $page.data;
 </script>
 
 <div class="navbar bg-base-100 shadow-md">
