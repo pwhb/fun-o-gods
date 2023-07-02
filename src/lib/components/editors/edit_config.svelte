@@ -31,7 +31,7 @@
 			console.log({ formData, data: 'hello' });
 			const url = `/api/v1/configs${create ? '' : `/${formData._id}`}`;
 			const options = {
-				method: create ? 'POST' : 'PUT',
+				method: create ? 'POST' : 'PATCH',
 				body: JSON.stringify({
 					name: name,
 					config: content.json ? content.json : JSON.parse(content.text as any)

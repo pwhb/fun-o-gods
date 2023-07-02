@@ -2,6 +2,7 @@
 	import FileDrop from 'filedrop-svelte';
 	import type { Files } from 'filedrop-svelte';
 	import { toast } from '@zerodevx/svelte-toast';
+	import { upload } from '$lib/api/common';
 	let files: Files;
 	export let label = 'Upload files';
 	export let loading = false;
@@ -11,15 +12,7 @@
 	let urls: any = [];
 	const handleUpload = async (file: any) => {
 		loading = true;
-		const formData = new FormData();
-		formData.append('file', file);
-		const url = '/api/v1/uploads';
-		const res = await fetch(url, {
-			method: 'POST',
-			body: formData
-		});
-
-		const data = await res.json();
+		const data = await upload(file);
 		loading = false;
 		return data;
 	};

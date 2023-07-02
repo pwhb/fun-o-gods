@@ -4,7 +4,7 @@ import clientPromise from "$lib/mongodb";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { ObjectId } from "mongodb";
 
-export const PUT: RequestHandler = async ({ request, params, locals }) =>
+export const PATCH: RequestHandler = async ({ request, params, locals }) =>
 {
     try
     {
