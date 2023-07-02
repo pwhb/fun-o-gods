@@ -1,7 +1,9 @@
 enum PlaceholderKeys
 {
     username = "anakin",
-    roleName = "admin"
+    roleName = "admin",
+    genres = "",
+    genresDescription = ""
 }
 
 export default PlaceholderKeys;

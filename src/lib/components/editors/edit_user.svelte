@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import FormInput from '$lib/components/form/form_input.svelte';
 	import FormToggle from '$lib/components/form/form_toggle.svelte';
-	import TitleWrapper from '$lib/components/wrappers/title_wrapper.svelte';
 	import PlaceholderKeys from '$lib/consts/PlaceholderKeys';
 	import { toast } from '@zerodevx/svelte-toast';
 
@@ -14,7 +13,7 @@
 	export let formData: IUserForm = {
 		username: '',
 		role: 'user',
-		active: true
+		active: false
 	};
 
 	export let roleOptions: any;
@@ -60,7 +59,6 @@
 </script>
 
 <div class="md:mx-40">
-	<TitleWrapper>{create ? 'Create Role' : 'Edit Role'}</TitleWrapper>
 	<form on:submit={onSubmit}>
 		<FormInput
 			name="username"

@@ -16,6 +16,15 @@ export interface IRoleForm
     active: boolean;
 }
 
+export interface IGenresForm
+{
+    _id?: ObjectId,
+    label: string;
+    value: string;
+    description: string;
+    active: boolean;
+}
+
 export interface IConfigForm
 {
     _id?: ObjectId,

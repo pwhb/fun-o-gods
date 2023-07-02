@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import FormInput from '$lib/components/form/form_input.svelte';
-	import TitleWrapper from '$lib/components/wrappers/title_wrapper.svelte';
 	import PlaceholderKeys from '$lib/consts/PlaceholderKeys';
 	import { toast } from '@zerodevx/svelte-toast';
-	import type { IConfigForm, IRoleForm } from '$lib/models/form';
+	import type { IConfigForm } from '$lib/models/form';
 	import FormJsonEditor from '../form/form_json_editor.svelte';
 	export let create = false;
 
@@ -59,7 +58,6 @@
 </script>
 
 <div class="md:mx-40">
-	<TitleWrapper>{create ? 'Create Role' : 'Edit Role'}</TitleWrapper>
 	<form on:submit={onSubmit}>
 		<FormInput
 			name="name"

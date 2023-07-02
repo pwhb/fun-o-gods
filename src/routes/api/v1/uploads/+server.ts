@@ -1,5 +1,6 @@
 import { DB_NAME } from "$env/static/private";
 import DBKeys from "$lib/consts/DBKeys";
+import { getQuery } from "$lib/helpers/request";
 import clientPromise from "$lib/mongodb";
 import { list, upload } from "$lib/s3";
 import { json, type RequestHandler } from "@sveltejs/kit";
@@ -9,7 +10,8 @@ export const GET: RequestHandler = async ({ url }) =>
     try
     {
         const filter: any = getQuery(url.searchParams);
-
+        console.log(filter);
+        
         const aws = await list();
         const client = await clientPromise;
         const col = client.db(DB_NAME).collection(DBKeys.UploadCollection);
@@ -59,3 +61,4 @@ export const POST: RequestHandler = async ({ request }) =>
         return json({ success: false, error: err }, { status: 400 });
     }
 };
+

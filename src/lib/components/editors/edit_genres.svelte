@@ -4,34 +4,43 @@
 	import FormToggle from '$lib/components/form/form_toggle.svelte';
 	import PlaceholderKeys from '$lib/consts/PlaceholderKeys';
 	import { toast } from '@zerodevx/svelte-toast';
-	import FormNumberInput from '../form/form_number_input.svelte';
-	import type { IRoleForm } from '$lib/models/form';
+	import type { IGenresForm } from '$lib/models/form';
+	import FormTextarea from '../form/form_textarea.svelte';
+	import { slugify } from '$lib/helpers/format';
 	export let create = false;
 
 	let submitLoading = false;
-	export let formData: IRoleForm = {
-		name: '',
-		level: 1,
+	export let formData: IGenresForm = {
+		label: '',
+		value: '',
+		description: '',
 		active: false
 	};
 
-	let { name, level, active } = formData;
+	let { label, value, description, active } = formData;
+
+	$: {
+		label = label.toLowerCase();
+		value = slugify(label);
+	}
 
 	const formError = {
-		name: '',
-		level: ''
+		label: '',
+		value: '',
+		description: ''
 	};
 
 	async function onSubmit() {
 		submitLoading = true;
 		try {
 			console.log({ formData, data: 'hello' });
-			const url = `/api/v1/roles${create ? '' : `/${formData._id}`}`;
+			const url = `/api/v1/genres${create ? '' : `/${formData._id}`}`;
 			const options = {
 				method: create ? 'POST' : 'PUT',
 				body: JSON.stringify({
-					name: name,
-					level: level,
+					label: label,
+					value: value,
+					description: description,
 					active: active
 				})
 			};
@@ -41,7 +50,7 @@
 				toast.push(create ? 'Successfully Created!' : 'Successfully Updated!', {
 					classes: ['info']
 				});
-				goto('/admin/roles');
+				goto('/admin/genres');
 			} else {
 				toast.push(data.error && data.error.message ? data.error.message : 'Failed.', {
 					classes: ['warn']
@@ -58,21 +67,28 @@
 <div class="md:mx-40">
 	<form on:submit={onSubmit}>
 		<FormInput
-			name="name"
-			label="Name"
-			bind:value={name}
-			placeholder={PlaceholderKeys.roleName}
-			errorMessage={formError.name}
+			label="label"
+			name="label"
+			bind:value={label}
+			placeholder={PlaceholderKeys.genres}
+			errorMessage={formError.label}
 		/>
-		<FormNumberInput
-			name="level"
-			label="Level"
-			bind:value={level}
-			placeholder="10"
-			errorMessage={formError.level}
+		<FormInput
+			label="value"
+			name="value"
+			bind:value
+			placeholder={PlaceholderKeys.genres}
+			errorMessage={formError.value}
+		/>
+		<FormTextarea
+			label="description"
+			name="description"
+			bind:value={description}
+			placeholder={PlaceholderKeys.genresDescription}
+			errorMessage={formError.description}
 		/>
 
-		<FormToggle name="active" label="Active" bind:value={active} />
+		<FormToggle label="active" name="Active" bind:value={active} />
 
 		<div class="h-5" />
 		<button class="btn btn-primary btn-md w-full" disabled={submitLoading} type="submit"
