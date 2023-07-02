@@ -25,6 +25,9 @@ export const load: LayoutServerLoad = async ({ locals }) =>
             name: 1,
             icon: 1,
             access: "$config.operations.read"
+        },
+        sort: {
+            name: 1
         }
     }).toArray();
 

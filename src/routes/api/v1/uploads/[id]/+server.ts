@@ -40,9 +40,7 @@ export const DELETE: RequestHandler = async ({ params }) =>
         const doc = await col.findOne({ _id: new ObjectId(id) }) as IUpload;
         const res = await remove(doc.Key);
         const dbRes = await col.deleteOne({ _id: new ObjectId(id) });
-
         console.log({ res, dbRes });
-
         return json({ success: true });
     } catch (err)
     {

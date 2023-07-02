@@ -10,13 +10,11 @@ export const GET: RequestHandler = async ({ url }) =>
     try
     {
         const filter: any = getQuery(url.searchParams);
-        console.log(filter);
-        
         const aws = await list();
         const client = await clientPromise;
         const col = client.db(DB_NAME).collection(DBKeys.UploadCollection);
         const docs = await col.find(filter).toArray();
-        return json({ success: true, data: docs, aws: aws?.Contents, total1: docs.length, total2: aws }, { status: 201 });
+        return json({ success: true, data: docs, aws: aws?.Contents }, { status: 201 });
     } catch (err)
     {
         console.error(err);
@@ -49,6 +47,7 @@ export const POST: RequestHandler = async ({ request }) =>
         const col = client.db(DB_NAME).collection(DBKeys.UploadCollection);
         const dbRes = await col.insertOne({
             Key: Key,
+            ContentType: file.type,
             active: true,
             createdAt: new Date(),
             updatedAt: new Date()
