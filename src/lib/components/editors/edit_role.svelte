@@ -28,7 +28,7 @@
 			console.log({ formData, data: 'hello' });
 			const url = `/api/v1/roles${create ? '' : `/${formData._id}`}`;
 			const options = {
-				method: create ? 'POST' : 'PUT',
+				method: create ? 'POST' : 'PATCH',
 				body: JSON.stringify({
 					name: name,
 					level: level,

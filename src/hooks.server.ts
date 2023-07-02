@@ -57,6 +57,7 @@ const authMiddleware: Handle = async ({ event, resolve }) =>
 				$project: {
 					username: 1,
 					role: 1,
+					avatar: 1,
 					"roleInfo.level": 1
 				}
 			},

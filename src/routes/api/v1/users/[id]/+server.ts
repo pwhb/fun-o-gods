@@ -4,7 +4,7 @@ import clientPromise from "$lib/mongodb";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { ObjectId } from "mongodb";
 
-export const PUT: RequestHandler = async ({ request, params, locals }) =>
+export const PATCH: RequestHandler = async ({ request, params, locals }) =>
 {
     try
     {
@@ -15,9 +15,7 @@ export const PUT: RequestHandler = async ({ request, params, locals }) =>
 
         const dbRes = await col.updateOne({ _id: new ObjectId(id) }, {
             $set: {
-                username: body.username,
-                role: body.role,
-                active: body.active,
+                ...body,
                 updatedAt: new Date(),
             }
         });

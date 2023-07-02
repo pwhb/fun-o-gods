@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import Avatar from '../common/avatar.svelte';
 	import LogoutButton from '../common/logout_button.svelte';
 	import Icon from '@iconify/svelte';
+
 	const { user, publicConfig, menuItems } = $page.data;
 </script>
 
@@ -42,11 +44,7 @@
 			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 			<label tabindex="0" class="btn btn-ghost btn-circle avatar">
-				<div class="avatar placeholder">
-					<div class="bg-primary text-neutral-content rounded-full w-8">
-						<span class="text-sm">K</span>
-					</div>
-				</div>
+				<Avatar {user} />
 			</label>
 			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 			<ul
@@ -54,7 +52,7 @@
 				class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-32"
 			>
 				<li>
-					<a class="justify-between" href="/hello">
+					<a class="justify-between" href={`/users/${user.username}`}>
 						{user.username}
 						<span class="badge">{user.role}</span>
 					</a>
