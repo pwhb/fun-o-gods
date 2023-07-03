@@ -16,7 +16,7 @@ export interface IRoleForm
     active: boolean;
 }
 
-export interface IGenresForm
+export interface IGenreForm
 {
     _id?: ObjectId,
     label: string;
@@ -36,3 +36,18 @@ export interface IEntityForm extends IConfigForm
 {
     icon: string;
 }
+
+export interface IStoryForm
+{
+    _id?: ObjectId,
+    title: string;
+    creator: ObjectId;
+    editors?: [ObjectId];
+    genres?: [string];
+    heroImage?: string;
+    description: string;
+    published: boolean;
+    active: boolean;
+}
+
+
