@@ -28,7 +28,6 @@
 	async function onSubmit() {
 		submitLoading = true;
 		try {
-			console.log({ formData, data: 'hello' });
 			const url = `/api/v1/configs${create ? '' : `/${formData._id}`}`;
 			const options = {
 				method: create ? 'POST' : 'PATCH',

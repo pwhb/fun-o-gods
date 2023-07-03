@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { PUBLIC_BASE_URL } from '$env/static/public';
 	import { upload } from '$lib/api/common';
-	import Avatar from '$lib/components/common/avatar.svelte';
+	import ProfileAvatar from '$lib/components/common/profile_avatar.svelte';
 	import PlaceholderKeys from '$lib/consts/PlaceholderKeys';
 	import Icon from '@iconify/svelte';
 	const { userInfo, user } = $page.data;
@@ -16,7 +16,6 @@
 		const file = event.target.files[0];
 		isUploading = true;
 		const data = await upload(file);
-		console.log({ data });
 		isUploading = false;
 		avatar = `${PUBLIC_BASE_URL}/api/v1/uploads/${data.data.insertedId}`;
 	}
@@ -41,53 +40,65 @@
 	}
 </script>
 
-<div class="bg-base-200 shadow-md m-1 rounded-lg p-3">
-	<div class="text-center my-3">
-		<!-- <div class="flex flex-col items-center"> -->
-		<Avatar user={{ username, avatar }} width={24} textSize={'2xl'} loading={isUploading} />
+<!-- <div class="bg-base-200 shadow-md m-1 rounded-lg p-3"> -->
+<div class="text-center my-2">
+	<!-- <div class="flex flex-col items-center"> -->
+	<ProfileAvatar user={{ username, avatar }} loading={isUploading} />
+	{#if editMode}
+		<div class={`relative bottom-4 left-8 -mb-6 ${isUploading ? 'hidden' : ''}`}>
+			<label for="avatar-upload" class="btn btn-xs btn-circle bg-base-100">
+				<Icon icon={'ic:baseline-plus'} />
+			</label>
+			<input type="file" class="hidden" id="avatar-upload" on:change={onFileChange} />
+		</div>
+	{/if}
+	<div class="my-3">
+		<!-- {#if editMode}
+			<input
+				type="text"
+				placeholder={PlaceholderKeys.username}
+				class="input input-xs input-bordered text-center text-sm bg-base-300"
+				bind:value={username}
+			/>
+		{:else} -->
+		<a class="font-semibold text-sm" href={`/users/${userInfo.username}`}>@{userInfo.username}</a>
+		<!-- {/if} -->
+	</div>
+
+	<div class="my-3">
 		{#if editMode}
-			<div class={`relative bottom-4 left-8 -mb-6 ${isUploading ? 'hidden' : ''}`}>
-				<label for="avatar-upload" class="btn btn-xs btn-circle bg-base-100">
-					<Icon icon={'ic:baseline-plus'} />
-				</label>
-				<input type="file" class="hidden" id="avatar-upload" on:change={onFileChange} />
+			<textarea
+				placeholder={PlaceholderKeys.bio}
+				rows="3"
+				class="w-64 mx-auto textarea textarea-sm shadow-md text-sm p-3 bg-base-300"
+				bind:value={bio}
+			/>
+		{:else}
+			<div class="w-64 mx-auto border-2 shadow-md rounded-xl">
+				<p class="text-sm p-5">
+					{bio ? bio : '...'}
+				</p>
 			</div>
 		{/if}
-		<div class="my-3">
-			{#if editMode}
-				<input
-					type="text"
-					placeholder={PlaceholderKeys.username}
-					class="input input-xs text-center text-sm"
-					bind:value={username}
-				/>
-			{:else}
-				<p class="font-semibold text-sm">{userInfo.username}</p>
-			{/if}
-		</div>
+	</div>
 
-		<div class="my-3">
-			<div class="w-64 mx-auto border-2 shadow-md rounded-xl p-5">
-				{#if editMode}
-					<input
-						type="text"
-						placeholder={PlaceholderKeys.bio}
-						class="textarea textarea-xs textarea-ghost text-center text-sm"
-						bind:value={bio}
-					/>
-				{:else}
-					<p class="text-sm">
-						{bio ? bio : '...'}
-					</p>
-				{/if}
-			</div>
-		</div>
+	<div class="join">
+		{#if userInfo._id === user._id}
+			<button class="btn btn-xs btn-secondary text-base-100 w-24 join-item">create</button>
+		{:else}
+			<button class="btn btn-xs btn-success text-base-100 w-24 join-item">follow</button>
+		{/if}
 		{#if userInfo._id === user._id}
 			<button
-				class={`btn btn-xs btn-${editMode ? 'primary' : 'neutral'} ${isSaving ? 'loading' : ''}`}
-				on:click={toggleEditMode}>{editMode ? 'Save' : 'Edit'}</button
+				class={`btn btn-xs ${editMode ? 'btn-primary' : 'btn-neutral'} ${
+					isSaving ? 'loading' : ''
+				} w-24 join-item`}
+				on:click={toggleEditMode}>{editMode ? 'save' : 'edit'}</button
 			>
+		{:else}
+			<button class="btn btn-xs btn-info text-base-100 w-24 join-item">share</button>
 		{/if}
-		<!-- </div> -->
 	</div>
+	<!-- </div> -->
 </div>
+<!-- </div> -->

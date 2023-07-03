@@ -3,8 +3,6 @@
 	import Avatar from '../common/avatar.svelte';
 	import LogoutButton from '../common/logout_button.svelte';
 	const { user, publicConfig } = $page.data;
-	
-	
 </script>
 
 <div class="navbar bg-base-100 shadow-md rounded-lg">
@@ -24,13 +22,18 @@
 				<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 				<ul
 					tabindex="0"
-					class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-32"
+					class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box"
 				>
 					<li>
 						<a class="justify-between" href={`/users/${user.username}`}>
-							{user.username}
+							<span class="font-semibold">
+								@{user.username}
+							</span>
 							<span class="badge">{user.role}</span>
 						</a>
+					</li>
+					<li>
+						<a href={`/setting`}> Setting </a>
 					</li>
 					<li><LogoutButton /></li>
 				</ul>
