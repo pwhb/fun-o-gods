@@ -1,6 +1,6 @@
 <script>
 	import { page } from '$app/stores';
-	import EditGenres from '$lib/components/editors/edit_genres.svelte';
+	import EditScenes from '$lib/components/editors/edit_scenes.svelte';
 </script>
 
-<EditGenres formData={$page.data.doc} />
+<EditScenes formData={$page.data.doc} />

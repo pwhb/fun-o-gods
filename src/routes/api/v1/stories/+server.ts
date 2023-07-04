@@ -31,8 +31,9 @@ export const POST: RequestHandler = async ({ request, locals }) =>
         const col = client.db(DB_NAME).collection(DBKeys.StoryCollection);
 
         const dbRes = await col.insertOne({
-            creator: locals.user._id,
             ...body,
+            creator: locals.user._id,
+            root: body.root ? new ObjectId(body.root) : null,
             createdAt: new Date(),
             updatedAt: new Date(),
         });

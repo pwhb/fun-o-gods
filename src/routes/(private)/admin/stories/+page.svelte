@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import BooleanBadge from '$lib/components/common/boolean_badge.svelte';
 	import { formatDate } from '$lib/helpers/format';
 	const { stories } = $page.data;
 </script>
@@ -13,6 +14,7 @@
 				<th>Title</th>
 				<th>Creator</th>
 				<th>Editors</th>
+				<th>Root Scene</th>
 				<th>Published</th>
 				<th>Active</th>
 				<th>Created At</th>
@@ -22,26 +24,15 @@
 		</thead>
 		<tbody>
 			<!-- row 1 -->
-			{#each stories as { _id, title, creator, editors, published, active, createdAt, updatedAt }, idx}
+			{#each stories as { _id, title, creator, editors, root, published, active, createdAt, updatedAt }, idx}
 				<tr>
 					<th>{idx + 1}</th>
 					<td>{title}</td>
 					<td><a href={`/users/${creator.username}`}>{creator.username}</a></td>
 					<td>{editors}</td>
-					<td
-						>{#if published}
-							<div class="badge badge-success badge-outline">{published}</div>
-						{:else}
-							<div class="badge badge-error badge-outline">{published}</div>
-						{/if}</td
-					>
-					<td
-						>{#if active}
-							<div class="badge badge-success badge-outline">{active}</div>
-						{:else}
-							<div class="badge badge-error badge-outline">{active}</div>
-						{/if}</td
-					>
+					<td>{root ? root.title : ''}</td>
+					<td><BooleanBadge value={published} /></td>
+					<td><BooleanBadge value={active} /></td>
 					<td>{formatDate(createdAt)}</td>
 					<td>{formatDate(updatedAt)}</td>
 					<td><a class="btn btn-xs btn-neutral" href={`/admin/stories/${_id}`}>Edit</a></td>

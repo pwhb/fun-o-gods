@@ -5,15 +5,15 @@ import { ObjectId } from "mongodb";
 import { serialize } from "$lib/helpers/format";
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ params }) =>
+export const load: PageServerLoad = async ({ params, locals }) =>
 {
     const { id } = params;
     const client = await clientPromise;
     const db = client.db(DB_NAME);
-    const doc = await db.collection(DBKeys.GenresCollection).findOne({ _id: new ObjectId(id) });
-
-
+    const doc = await db.collection(DBKeys.SceneCollection).findOne({ _id: new ObjectId(id) });
+    const stories = await db.collection(DBKeys.StoryCollection).find({ creator: locals.user._id, active: true }).toArray();
     return {
         doc: serialize(doc),
+        stories: serialize(stories),
     };
 };

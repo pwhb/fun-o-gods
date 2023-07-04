@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import BooleanBadge from '$lib/components/common/boolean_badge.svelte';
 	import { formatDate } from '$lib/helpers/format';
 	const { genres } = $page.data;
 </script>
@@ -26,11 +27,7 @@
 					<td>{label}</td>
 					<td>{value}</td>
 					<td
-						>{#if active}
-							<div class="badge badge-success badge-outline">{active}</div>
-						{:else}
-							<div class="badge badge-error badge-outline">{active}</div>
-						{/if}</td
+						><BooleanBadge value={active} /></td
 					>
 					<td>{formatDate(createdAt)}</td>
 					<td>{formatDate(updatedAt)}</td>

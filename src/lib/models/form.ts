@@ -42,13 +42,29 @@ export interface IStoryForm
 {
     _id?: ObjectId,
     title: string;
-    creator: IUser;
+    creator?: IUser;
     editors?: [ObjectId?];
     genres?: any;
     heroImage?: string;
     description?: string;
+    root?: string;
     published: boolean;
     active: boolean;
 }
+
+export interface ISceneForm
+{
+    _id?: ObjectId,
+    title: string;
+    story?: string;
+    creator?: IUser;
+    editors?: [ObjectId?];
+    heroImage?: string;
+    body?: string;
+    endpoints?: [ObjectId?];
+    published: boolean;
+    active: boolean;
+}
+
 
 

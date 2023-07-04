@@ -5,16 +5,13 @@ import { ObjectId } from "mongodb";
 import { serialize } from "$lib/helpers/format";
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ params }) =>
+export const load: PageServerLoad = async ({ locals }) =>
 {
-    const { id } = params;
+
     const client = await clientPromise;
     const db = client.db(DB_NAME);
-    const doc = await db.collection(DBKeys.StoryCollection).findOne({ _id: new ObjectId(id) });
-    const scenes = await db.collection(DBKeys.SceneCollection).find({ story: doc?._id, active: true }).toArray();
-
+    const stories = await db.collection(DBKeys.StoryCollection).find({ creator: locals.user._id, active: true }).toArray();
     return {
-        doc: serialize(doc),
-        scenes: serialize(scenes),
+        stories: serialize(stories),
     };
 };
