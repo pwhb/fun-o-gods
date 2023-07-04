@@ -1,4 +1,5 @@
 import type { ObjectId } from "mongodb";
+import type { IUser } from "./user";
 
 export interface IUserForm
 {
@@ -41,7 +42,7 @@ export interface IStoryForm
 {
     _id?: ObjectId,
     title: string;
-    creator: ObjectId;
+    creator: IUser;
     editors?: [ObjectId?];
     genres?: any;
     heroImage?: string;
