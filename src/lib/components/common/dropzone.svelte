@@ -42,10 +42,12 @@
 		</div>
 	{:else}
 		<FileDrop on:filedrop={handleDrop}>
-			<div class="p-5 border-2 border-dashed border-primary shadow-md rounded-xl bg-base-500">
-				<div class="flex flex-col items-center gap-5">
-					<img src="https://www.svgrepo.com/show/449957/upload.svg" class="w-10" alt="" />
-					<span class="font-light text-gray-400">{label}</span>
+			<div
+				class="p-3 md:p-5 border-2 border-dashed border-primary shadow-md rounded-xl bg-base-500"
+			>
+				<div class="flex flex-col items-center md:gap-5 gap-2">
+					<img src="https://www.svgrepo.com/show/449957/upload.svg" class="md:w-10 w-4" alt="" />
+					<span class="font-light text-xs md:text-sm text-gray-400">{label}</span>
 				</div>
 			</div>
 		</FileDrop>

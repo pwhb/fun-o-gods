@@ -97,6 +97,7 @@
 		<FormTextarea
 			label="Body"
 			name="body"
+			rows={12}
 			bind:value={body}
 			placeholder={PlaceholderKeys.sceneBody}
 		/>
