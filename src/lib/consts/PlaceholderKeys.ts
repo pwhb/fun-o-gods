@@ -7,7 +7,8 @@ enum PlaceholderKeys
     entityIcon = "ant-design:setting-filled",
     configName = "default",
     genres = "",
-    genresDescription = "hello"
+    genresDescription = "hello",
+    storyTitle = ""
 }
 
 export default PlaceholderKeys;

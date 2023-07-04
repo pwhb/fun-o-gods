@@ -17,3 +17,4 @@ export const load: PageServerLoad = async ({ params }) =>
         userInfo: serialize(userInfo)
     };
 };
+
