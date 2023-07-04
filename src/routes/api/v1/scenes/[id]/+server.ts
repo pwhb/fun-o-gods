@@ -11,14 +11,12 @@ export const PATCH: RequestHandler = async ({ request, params, locals }) =>
         const { id } = params;
         const body = await request.json();
         const client = await clientPromise;
-        const col = client.db(DB_NAME).collection(DBKeys.GenresCollection);
+        const col = client.db(DB_NAME).collection(DBKeys.SceneCollection);
 
         const dbRes = await col.updateOne({ _id: new ObjectId(id) }, {
             $set: {
-                label: body.label,
-                value: body.value,
-                description: body.description,
-                active: body.active,
+                ...body,
+                story: new ObjectId(body.story),
                 updatedAt: new Date(),
             }
         });

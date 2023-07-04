@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { PUBLIC_BASE_URL } from '$env/static/public';
+	import BooleanBadge from '$lib/components/common/boolean_badge.svelte';
 	import UrlCopyButton from '$lib/components/common/url_copy_button.svelte';
 	import { formatDate } from '$lib/helpers/format';
 	const { uploads } = $page.data;
@@ -42,11 +43,7 @@
 						{ContentType}
 					</td>
 					<td
-						>{#if active}
-							<div class="badge badge-success badge-outline">{active}</div>
-						{:else}
-							<div class="badge badge-error badge-outline">{active}</div>
-						{/if}</td
+						><BooleanBadge value={active} /></td
 					>
 					<td>{formatDate(createdAt)}</td>
 					<td>{formatDate(updatedAt)}</td>

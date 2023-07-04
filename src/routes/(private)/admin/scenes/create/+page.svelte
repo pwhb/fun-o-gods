@@ -1,5 +1,5 @@
 <script>
-	import EditGenres from '$lib/components/editors/edit_genres.svelte';
+	import EditScenes from '$lib/components/editors/edit_scenes.svelte';
 </script>
 
-<EditGenres create={true} />
+<EditScenes create={true} />

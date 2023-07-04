@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import BooleanBadge from '$lib/components/common/boolean_badge.svelte';
 	import { formatDate } from '$lib/helpers/format';
-	const { genres } = $page.data;
+	const { scenes } = $page.data;
 </script>
 
 <div class="overflow-x-auto">
@@ -10,31 +11,29 @@
 		<thead>
 			<tr>
 				<th />
-				<th>Label</th>
-				<th>Value</th>
+				<th>Title</th>
+				<th>Story</th>
+				<th>Creator</th>
+				<th>Published</th>
 				<th>Active</th>
 				<th>Created At</th>
 				<th>Updated At</th>
-				<td><a class="btn btn-xs btn-primary" href="/admin/genres/create">Add</a></td>
+				<td><a class="btn btn-xs btn-primary" href="/admin/scenes/create">Add</a></td>
 			</tr>
 		</thead>
 		<tbody>
 			<!-- row 1 -->
-			{#each genres as { _id, label, value, active, createdAt, updatedAt }, idx}
+			{#each scenes as { _id, title, story, creator, published, active, createdAt, updatedAt }, idx}
 				<tr>
 					<th>{idx + 1}</th>
-					<td>{label}</td>
-					<td>{value}</td>
-					<td
-						>{#if active}
-							<div class="badge badge-success badge-outline">{active}</div>
-						{:else}
-							<div class="badge badge-error badge-outline">{active}</div>
-						{/if}</td
-					>
+					<td>{title}</td>
+					<td>{story.title}</td>
+					<td>{creator.username}</td>
+					<td><BooleanBadge value={published} /></td>
+					<td><BooleanBadge value={active} /></td>
 					<td>{formatDate(createdAt)}</td>
 					<td>{formatDate(updatedAt)}</td>
-					<td><a class="btn btn-xs btn-neutral" href={`/admin/genres/${_id}`}>Edit</a></td>
+					<td><a class="btn btn-xs btn-neutral" href={`/admin/scenes/${_id}`}>Edit</a></td>
 				</tr>
 			{/each}
 		</tbody>

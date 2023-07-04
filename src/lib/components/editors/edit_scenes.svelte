@@ -4,43 +4,52 @@
 	import FormToggle from '$lib/components/form/form_toggle.svelte';
 	import PlaceholderKeys from '$lib/consts/PlaceholderKeys';
 	import { toast } from '@zerodevx/svelte-toast';
-	import type { IGenreForm } from '$lib/models/form';
+	import type { IGenreForm, ISceneForm } from '$lib/models/form';
 	import FormTextarea from '../form/form_textarea.svelte';
 	import { slugify } from '$lib/helpers/format';
+	import { page } from '$app/stores';
+	import Dropzone from '../common/dropzone.svelte';
+	import { PUBLIC_BASE_URL } from '$env/static/public';
+	import FormSelect from '../form/form_select.svelte';
 	export let create = false;
+	const { user, stories } = $page.data;
 
+	const storyOptions = stories.map((story: any) => ({ label: story.title, value: story._id }));
 	let submitLoading = false;
-	export let formData: IGenreForm = {
-		label: '',
-		value: '',
-		description: '',
+	export let formData: ISceneForm = {
+		title: '',
+		story: undefined,
+		creator: user,
+		editors: [],
+		heroImage: '',
+		body: '',
+		endpoints: [],
+		published: false,
 		active: false
 	};
 
-	let { label, value, description, active } = formData;
-
-	$: {
-		label = label.toLowerCase();
-		value = slugify(label);
-	}
+	let { title, story, creator, editors, heroImage, body, endpoints, published, active } = formData;
 
 	const formError = {
-		label: '',
-		value: '',
-		description: ''
+		title: '',
+		body: ''
 	};
 
 	async function onSubmit() {
 		submitLoading = true;
 		try {
-			const url = `/api/v1/genres${create ? '' : `/${formData._id}`}`;
+			const url = `/api/v1/scenes${create ? '' : `/${formData._id}`}`;
 			const options = {
 				method: create ? 'POST' : 'PATCH',
 				body: JSON.stringify({
-					label: label,
-					value: value,
-					description: description,
-					active: active
+					title: title, // done
+					story: story,
+					editors: editors,
+					heroImage: heroImage, // done
+					body: body, // done
+					endpoints: endpoints,
+					published: published, // done
+					active: active // done
 				})
 			};
 			const res = await fetch(url, options);
@@ -49,7 +58,7 @@
 				toast.push(create ? 'Successfully Created!' : 'Successfully Updated!', {
 					classes: ['info']
 				});
-				goto('/admin/genres');
+				goto('/admin/scenes');
 			} else {
 				toast.push(data.error && data.error.message ? data.error.message : 'Failed.', {
 					classes: ['warn']
@@ -65,29 +74,35 @@
 
 <div class="md:max-w-2xl mx-auto">
 	<form on:submit={onSubmit}>
+		<FormSelect label="Story" name="story" bind:value={story} options={storyOptions} />
 		<FormInput
-			label="label"
-			name="label"
-			bind:value={label}
-			placeholder={PlaceholderKeys.genres}
-			errorMessage={formError.label}
+			label="Title"
+			name="title"
+			bind:value={title}
+			placeholder={PlaceholderKeys.sceneTitle}
 		/>
-		<FormInput
-			label="value"
-			name="value"
-			bind:value
-			placeholder={PlaceholderKeys.genres}
-			errorMessage={formError.value}
-		/>
+		<div class="my-5">
+			{#if heroImage}
+				<div class="m-5">
+					<img src={heroImage} alt="hero" class="p-3 shadow-md rounded-md bg-neutral-200" />
+				</div>
+			{/if}
+			<Dropzone
+				handleUpdateUrls={(data) => {
+					heroImage = `${PUBLIC_BASE_URL}/api/v1/uploads/${data.insertedId}`;
+					console.log({ data, heroImage });
+				}}
+			/>
+		</div>
 		<FormTextarea
-			label="description"
-			name="description"
-			bind:value={description}
-			placeholder={PlaceholderKeys.genresDescription}
-			errorMessage={formError.description}
+			label="Body"
+			name="body"
+			bind:value={body}
+			placeholder={PlaceholderKeys.sceneBody}
 		/>
 
-		<FormToggle label="active" name="Active" bind:value={active} />
+		<FormToggle label="Published" name="published" bind:value={published} />
+		<FormToggle label="Active" name="active" bind:value={active} />
 
 		<div class="h-5" />
 		<button class="btn btn-primary btn-md w-full" disabled={submitLoading} type="submit"

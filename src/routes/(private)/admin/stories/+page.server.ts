@@ -22,6 +22,19 @@ export const load: PageServerLoad = async () =>
                 creator: { $arrayElemAt: ['$creator', 0] }
             }
         },
+        {
+            $lookup: {
+                from: 'scenes',
+                localField: 'root',
+                foreignField: '_id',
+                as: 'root'
+            }
+        },
+        {
+            $addFields: {
+                root: { $arrayElemAt: ['$root', 0] }
+            }
+        },
     ]).toArray();
     return {
         stories: serialize(docs)

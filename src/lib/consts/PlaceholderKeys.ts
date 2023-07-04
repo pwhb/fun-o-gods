@@ -8,7 +8,10 @@ enum PlaceholderKeys
     configName = "default",
     genres = "",
     genresDescription = "hello",
-    storyTitle = ""
+    storyTitle = "",
+    sceneTitle = "",
+    sceneBody = ""
+
 }
 
 export default PlaceholderKeys;

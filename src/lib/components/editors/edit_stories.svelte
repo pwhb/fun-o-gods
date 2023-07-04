@@ -12,9 +12,9 @@
 	import FormMultiselect from '../form/form_multiselect.svelte';
 	import Dropzone from '../common/dropzone.svelte';
 	import { PUBLIC_BASE_URL } from '$env/static/public';
+	import FormSelect from '../form/form_select.svelte';
 
-	const { user } = $page.data;
-
+	const { user, scenes } = $page.data;
 	const options = $page.data.genres.map((genre: any) => ({
 		label: genre.label,
 		value: genre.value
@@ -22,6 +22,11 @@
 	console.log('options: ' + options);
 
 	export let create = false;
+	
+	let sceneOptions: any;
+	if (!create) {
+		sceneOptions = scenes.map((scene: any) => ({ label: scene.title, value: scene._id }));
+	}
 
 	let submitLoading = false;
 	export let formData: IStoryForm = {
@@ -31,11 +36,13 @@
 		genres: [],
 		heroImage: '',
 		description: '',
+		root: '',
 		published: false,
 		active: false
 	};
 
-	let { title, creator, editors, genres, heroImage, description, published, active } = formData;
+	let { title, creator, editors, genres, heroImage, description, root, published, active } =
+		formData;
 
 	const formError = {
 		title: '',
@@ -55,6 +62,7 @@
 					genres,
 					heroImage,
 					description,
+					root,
 					published,
 					active
 				})
@@ -90,6 +98,7 @@
 			placeholder={PlaceholderKeys.storyTitle}
 			errorMessage={formError.title}
 		/>
+
 		<FormMultiselect label="Genres" name="genres" bind:values={genres} {options} />
 		<div class="my-5">
 			{#if heroImage}
@@ -112,6 +121,7 @@
 			errorMessage={formError.description}
 		/>
 		{#if !create}
+			<FormSelect label="Root Scene" name="root" bind:value={root} options={sceneOptions} />
 			<FormToggle label="Published" name="published" bind:value={published} />
 		{/if}
 		<FormToggle label="Active" name="active" bind:value={active} />

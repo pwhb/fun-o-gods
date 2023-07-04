@@ -16,6 +16,7 @@ export const PATCH: RequestHandler = async ({ request, params, locals }) =>
         const dbRes = await col.updateOne({ _id: new ObjectId(id) }, {
             $set: {
                 ...body,
+                root: body.root ? new ObjectId(body.root) : null,
                 updatedAt: new Date(),
             }
         });
