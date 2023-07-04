@@ -32,9 +32,14 @@
 	};
 </script>
 
-<div class="max-w-xs mx-auto">
+<div class="mx-auto">
 	{#if loading}
-		<p>Loading...</p>
+		<div
+			class="p-5 border-2 border-dashed border-primary shadow-md rounded-xl bg-base-500 text-center"
+		>
+			<div class="loading w-12" />
+			<p class="text-neutral-500">Uploading ...</p>
+		</div>
 	{:else}
 		<FileDrop on:filedrop={handleDrop}>
 			<div class="p-5 border-2 border-dashed border-primary shadow-md rounded-xl bg-base-500">

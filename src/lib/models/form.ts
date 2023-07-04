@@ -42,10 +42,10 @@ export interface IStoryForm
     _id?: ObjectId,
     title: string;
     creator: ObjectId;
-    editors?: [ObjectId];
-    genres?: [string];
+    editors?: [ObjectId?];
+    genres?: any;
     heroImage?: string;
-    description: string;
+    description?: string;
     published: boolean;
     active: boolean;
 }

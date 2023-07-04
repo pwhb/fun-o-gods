@@ -1,5 +1,5 @@
 <script>
-	import EditGenres from '$lib/components/editors/edit_genres.svelte';
+	import EditStories from '$lib/components/editors/edit_stories.svelte';
 </script>
 
-<EditGenres create={true} />
+<EditStories create={true} />

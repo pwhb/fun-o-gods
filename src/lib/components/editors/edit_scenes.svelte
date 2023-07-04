@@ -63,7 +63,7 @@
 	}
 </script>
 
-<div class="md:mx-40">
+<div class="md:max-w-2xl mx-auto">
 	<form on:submit={onSubmit}>
 		<FormInput
 			label="label"

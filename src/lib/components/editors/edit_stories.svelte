@@ -4,28 +4,41 @@
 	import FormToggle from '$lib/components/form/form_toggle.svelte';
 	import PlaceholderKeys from '$lib/consts/PlaceholderKeys';
 	import { toast } from '@zerodevx/svelte-toast';
-	import type { IGenreForm } from '$lib/models/form';
+	import type { IGenreForm, IStoryForm } from '$lib/models/form';
 	import FormTextarea from '../form/form_textarea.svelte';
+	import MultiSelect from 'svelte-multiselect';
 	import { slugify } from '$lib/helpers/format';
+	import { page } from '$app/stores';
+	import FormMultiselect from '../form/form_multiselect.svelte';
+	import Dropzone from '../common/dropzone.svelte';
+	import { PUBLIC_BASE_URL } from '$env/static/public';
+
+	const { user } = $page.data;
+
+	const options = $page.data.genres.map((genre: any) => ({
+		label: genre.label,
+		value: genre.value
+	}));
+	console.log('options: ' + options);
+
 	export let create = false;
 
 	let submitLoading = false;
-	export let formData: IGenreForm = {
-		label: '',
-		value: '',
+	export let formData: IStoryForm = {
+		title: '',
+		creator: user,
+		editors: [],
+		genres: [],
+		heroImage: '',
 		description: '',
+		published: false,
 		active: false
 	};
 
-	let { label, value, description, active } = formData;
-
-	$: {
-		label = label.toLowerCase();
-		value = slugify(label);
-	}
+	let { title, creator, editors, genres, heroImage, description, published, active } = formData;
 
 	const formError = {
-		label: '',
+		title: '',
 		value: '',
 		description: ''
 	};
@@ -33,14 +46,17 @@
 	async function onSubmit() {
 		submitLoading = true;
 		try {
-			const url = `/api/v1/genres${create ? '' : `/${formData._id}`}`;
+			const url = `/api/v1/stories${create ? '' : `/${formData._id}`}`;
 			const options = {
 				method: create ? 'POST' : 'PATCH',
 				body: JSON.stringify({
-					label: label,
-					value: value,
-					description: description,
-					active: active
+					title,
+					editors,
+					genres,
+					heroImage,
+					description,
+					published,
+					active
 				})
 			};
 			const res = await fetch(url, options);
@@ -49,12 +65,14 @@
 				toast.push(create ? 'Successfully Created!' : 'Successfully Updated!', {
 					classes: ['info']
 				});
-				goto('/admin/genres');
+				goto('/admin/stories');
 			} else {
 				toast.push(data.error && data.error.message ? data.error.message : 'Failed.', {
 					classes: ['warn']
 				});
 			}
+
+			console.log({ genres });
 		} catch (e) {
 			console.error(e);
 		} finally {
@@ -63,31 +81,40 @@
 	}
 </script>
 
-<div class="md:mx-40">
+<div class="md:max-w-2xl mx-auto">
 	<form on:submit={onSubmit}>
 		<FormInput
-			label="label"
-			name="label"
-			bind:value={label}
-			placeholder={PlaceholderKeys.genres}
-			errorMessage={formError.label}
+			label="Title"
+			name="title"
+			bind:value={title}
+			placeholder={PlaceholderKeys.storyTitle}
+			errorMessage={formError.title}
 		/>
-		<FormInput
-			label="value"
-			name="value"
-			bind:value
-			placeholder={PlaceholderKeys.genres}
-			errorMessage={formError.value}
-		/>
+		<FormMultiselect label="Genres" name="genres" bind:values={genres} {options} />
+		<div class="my-5">
+			{#if heroImage}
+				<div class="m-5">
+					<img src={heroImage} alt="hero" class="p-3 shadow-md rounded-md bg-neutral-200" />
+				</div>
+			{/if}
+			<Dropzone
+				handleUpdateUrls={(data) => {
+					heroImage = `${PUBLIC_BASE_URL}/api/v1/uploads/${data.insertedId}`;
+					console.log({ data, heroImage });
+				}}
+			/>
+		</div>
 		<FormTextarea
-			label="description"
+			label="Description"
 			name="description"
 			bind:value={description}
-			placeholder={PlaceholderKeys.genresDescription}
+			placeholder={''}
 			errorMessage={formError.description}
 		/>
-
-		<FormToggle label="active" name="Active" bind:value={active} />
+		{#if !create}
+			<FormToggle label="Published" name="published" bind:value={published} />
+		{/if}
+		<FormToggle label="Active" name="active" bind:value={active} />
 
 		<div class="h-5" />
 		<button class="btn btn-primary btn-md w-full" disabled={submitLoading} type="submit"

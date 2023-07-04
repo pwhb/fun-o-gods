@@ -26,7 +26,7 @@
 				<tr>
 					<th>{idx + 1}</th>
 					<td>{title}</td>
-					<td>{creator}</td>
+					<td><a href={`/users/${creator.username}`}>{creator.username}</a></td>
 					<td>{editors}</td>
 					<td
 						>{#if published}

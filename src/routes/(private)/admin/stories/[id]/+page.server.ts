@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ params }) =>
     const { id } = params;
     const client = await clientPromise;
     const db = client.db(DB_NAME);
-    const doc = await db.collection(DBKeys.GenresCollection).findOne({ _id: new ObjectId(id) });
+    const doc = await db.collection(DBKeys.StoryCollection).findOne({ _id: new ObjectId(id) });
 
 
     return {

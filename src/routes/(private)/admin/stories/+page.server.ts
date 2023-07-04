@@ -8,7 +8,21 @@ export const load: PageServerLoad = async () =>
 {
     const client = await clientPromise;
     const col = client.db(DB_NAME).collection(DBKeys.StoryCollection);
-    const docs = await col.find({}, { sort: { label: 1 } }).toArray();
+    const docs = await col.aggregate([
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'creator',
+                foreignField: '_id',
+                as: 'creator'
+            }
+        },
+        {
+            $addFields: {
+                creator: { $arrayElemAt: ['$creator', 0] }
+            }
+        },
+    ]).toArray();
     return {
         stories: serialize(docs)
     };

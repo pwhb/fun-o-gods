@@ -4,6 +4,7 @@ import { getQuery, getSort } from "$lib/helpers/request";
 import clientPromise from "$lib/mongodb";
 
 import { type RequestHandler, json } from "@sveltejs/kit";
+import { ObjectId } from "mongodb";
 
 export const GET: RequestHandler = async ({ url }) =>
 {
@@ -21,7 +22,7 @@ export const GET: RequestHandler = async ({ url }) =>
     }
 };
 
-export const POST: RequestHandler = async ({ request }) =>
+export const POST: RequestHandler = async ({ request, locals }) =>
 {
     try
     {
@@ -30,6 +31,7 @@ export const POST: RequestHandler = async ({ request }) =>
         const col = client.db(DB_NAME).collection(DBKeys.StoryCollection);
 
         const dbRes = await col.insertOne({
+            creator: locals.user._id,
             ...body,
             createdAt: new Date(),
             updatedAt: new Date(),
