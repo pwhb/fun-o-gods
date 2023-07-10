@@ -84,5 +84,8 @@
 			<input type="text" placeholder="Title" class="input input-ghost input-sm w-full" />
 		</div>
 		<textarea class="textarea textarea-ghost textarea-sm w-full" placeholder="Description" rows="3" />
+		<div class="my-3">
+			<input type="text" placeholder="Title" class="input input-ghost input-sm w-full" />
+		</div>
 	</form>
 </CardWrapper>
