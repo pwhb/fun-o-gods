@@ -4,6 +4,7 @@
 	import { PUBLIC_BASE_URL } from '$env/static/public';
 	import { upload } from '$lib/api/common';
 	import ProfileAvatar from '$lib/components/common/profile_avatar.svelte';
+	import SaveButton from '$lib/components/common/save_button.svelte';
 	import PlaceholderKeys from '$lib/consts/PlaceholderKeys';
 	import Icon from '@iconify/svelte';
 	import { toast } from '@zerodevx/svelte-toast';
@@ -35,8 +36,8 @@
 		toast.push('Successfully Updated!', {
 			classes: ['info']
 		});
-		goto(`/users/${$page.data.user.username}`);
 		isSaving = false;
+		goto(`/users/${$page.data.user.username}`);
 	}
 </script>
 
@@ -63,7 +64,6 @@
 		/>
 	</div>
 	<div class="join">
-		<button class="btn btn-xs btn-success text-base-100 w-48 join-item" on:click={save}>save</button
-		>
+		<SaveButton {save} />
 	</div>
 </div>

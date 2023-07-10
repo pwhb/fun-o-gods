@@ -33,7 +33,7 @@
 						</a>
 					</li>
 					<li>
-						<a href={`/setting`}> Setting </a>
+						<a href={`/edit/settings`}> Setting </a>
 					</li>
 					<li><LogoutButton /></li>
 				</ul>
