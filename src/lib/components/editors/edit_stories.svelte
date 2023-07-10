@@ -19,10 +19,9 @@
 		label: genre.label,
 		value: genre.value
 	}));
-	console.log('options: ' + options);
 
 	export let create = false;
-	
+
 	let sceneOptions: any;
 	if (!create) {
 		sceneOptions = scenes.map((scene: any) => ({ label: scene.title, value: scene._id }));
@@ -80,7 +79,7 @@
 				});
 			}
 
-			console.log({ genres });
+		
 		} catch (e) {
 			console.error(e);
 		} finally {
