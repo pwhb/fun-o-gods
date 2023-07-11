@@ -5,7 +5,7 @@ import { ObjectId } from "mongodb";
 import type { PageServerLoad } from "./$types";
 import { serialize } from "$lib/helpers/format";
 
-export const load: PageServerLoad = async ({ params }) =>
+export const load: PageServerLoad = async ({ params, locals }) =>
 {
     const { id } = params;
     const client = await clientPromise;
@@ -13,9 +13,13 @@ export const load: PageServerLoad = async ({ params }) =>
     const userInfo = await db
         .collection(DBKeys.UserCollection)
         .findOne({ username: id }, { projection: { password: 0 } });
-    const filter = {
+    const filter = userInfo?._id.toString() === locals.user._id.toString() ? {
         creator: userInfo?._id,
         active: true
+    } : {
+        creator: userInfo?._id,
+        active: true,
+        published: true
     };
 
     const stories = await db.collection(DBKeys.StoryCollection).aggregate([

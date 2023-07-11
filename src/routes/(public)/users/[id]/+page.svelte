@@ -5,17 +5,19 @@
 	import StoryCard from '$lib/components/public/story_card.svelte';
 	import PlaceholderKeys from '$lib/consts/PlaceholderKeys';
 
-	const { user, stories } = $page.data;
+	const { user } = $page.data;
 
 	let editMode = false;
 	let isUploading = false;
 
 	let { username, avatar, bio } = $page.data.userInfo;
+	let stories = $page.data.stories;
 
 	$: {
 		username = $page.data.userInfo.username;
 		avatar = $page.data.userInfo.avatar;
 		bio = $page.data.userInfo.bio;
+		stories = $page.data.stories;
 	}
 
 	console.log(stories);
