@@ -40,7 +40,7 @@ const register: Action = async ({ request, cookies }) =>
     await col.insertOne({
         username,
         password: hashedPassword,
-        role: "user",
+        role: "guest",
         activated: false,
         createdAt: new Date(),
         updatedAt: new Date()

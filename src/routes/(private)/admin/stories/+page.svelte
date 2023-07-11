@@ -27,7 +27,11 @@
 			{#each stories as { _id, title, creator, editors, root, published, active, createdAt, updatedAt }, idx}
 				<tr>
 					<th>{idx + 1}</th>
-					<td>{title}</td>
+					<td>
+						<a href={`/stories/${_id}`}>
+							{title}
+						</a>
+					</td>
 					<td><a href={`/users/${creator.username}`}>{creator.username}</a></td>
 					<td>{editors}</td>
 					<td>{root ? root.title : ''}</td>
