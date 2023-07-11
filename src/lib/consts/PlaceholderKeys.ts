@@ -1,6 +1,7 @@
 enum PlaceholderKeys
 {
     username = "anakin",
+    email = "anakin@jedi.org",
     bio = "hello",
     roleName = "admin",
     entityName = "users",

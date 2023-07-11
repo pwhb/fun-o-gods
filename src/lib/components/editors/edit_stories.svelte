@@ -17,12 +17,11 @@
 	const { user, scenes } = $page.data;
 	const options = $page.data.genres.map((genre: any) => ({
 		label: genre.label,
-		value: genre.value
+		value: genre._id
 	}));
-	console.log('options: ' + options);
 
 	export let create = false;
-	
+
 	let sceneOptions: any;
 	if (!create) {
 		sceneOptions = scenes.map((scene: any) => ({ label: scene.title, value: scene._id }));
@@ -41,9 +40,12 @@
 		active: false
 	};
 
-	let { title, creator, editors, genres, heroImage, description, root, published, active } =
-		formData;
+	let { title, creator, editors, heroImage, description, root, published, active } = formData;
+	
 
+	let genres: any = formData.genres
+		? formData.genres.map((v: any) => ({ label: v.label, value: v._id }))
+		: [];
 	const formError = {
 		title: '',
 		value: '',
@@ -59,7 +61,7 @@
 				body: JSON.stringify({
 					title,
 					editors,
-					genres,
+					genres: genres.map((v: any) => v.value),
 					heroImage,
 					description,
 					root,
@@ -79,8 +81,6 @@
 					classes: ['warn']
 				});
 			}
-
-			console.log({ genres });
 		} catch (e) {
 			console.error(e);
 		} finally {

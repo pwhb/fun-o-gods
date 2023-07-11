@@ -11,7 +11,13 @@ export const load: PageServerLoad = async ({ locals }) =>
 {
     if (locals.user)
     {
-        throw redirect(302, "/admin");
+        if (locals.user.role === 'admin' || locals.user.role === 'root')
+        {
+            throw redirect(302, "/admin");
+        } else
+        {
+            throw redirect(302, "/");
+        }
     }
 
 };
@@ -62,7 +68,7 @@ const login: Action = async ({ request, cookies }) =>
         maxAge: 60 * 60 * 24 // 1 day
     });
 
-    throw redirect(303, '/admin');
+    throw redirect(303, '/');
 };
 
 export const actions: Actions = {

@@ -17,7 +17,7 @@ export const PATCH: RequestHandler = async ({ request, params, locals }) =>
         {
             const alreadyExists = await col.findOne({ username: body.username });
 
-            if (alreadyExists)
+            if (alreadyExists && alreadyExists._id.toString() !== id)
             {
                 return json({
                     success: false, error: {

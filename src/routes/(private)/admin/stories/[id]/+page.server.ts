@@ -10,7 +10,22 @@ export const load: PageServerLoad = async ({ params }) =>
     const { id } = params;
     const client = await clientPromise;
     const db = client.db(DB_NAME);
-    const doc = await db.collection(DBKeys.StoryCollection).findOne({ _id: new ObjectId(id) });
+    const doc = (await db.collection(DBKeys.StoryCollection).aggregate([
+        {
+            $match: { _id: new ObjectId(id) }
+        },
+        {
+            $lookup: {
+                from: 'genres',
+                localField: 'genres',
+                foreignField: '_id',
+                as: 'genres'
+            }
+        },
+        {
+            $limit: 1
+        }
+    ]).toArray())[0];
     const scenes = await db.collection(DBKeys.SceneCollection).find({ story: doc?._id, active: true }).toArray();
 
     return {

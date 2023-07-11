@@ -56,12 +56,14 @@ export interface ISceneForm
 {
     _id?: ObjectId,
     title: string;
+    isRoot: boolean;
+    prompt?: string;
     story?: string;
     creator?: IUser;
     editors?: [ObjectId?];
     heroImage?: string;
     body?: string;
-    endpoints?: [ObjectId?];
+    endpoints?: any;
     published: boolean;
     active: boolean;
 }

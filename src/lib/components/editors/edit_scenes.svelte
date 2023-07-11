@@ -11,24 +11,38 @@
 	import Dropzone from '../common/dropzone.svelte';
 	import { PUBLIC_BASE_URL } from '$env/static/public';
 	import FormSelect from '../form/form_select.svelte';
+	import FormMultiselect from '../form/form_multiselect.svelte';
 	export let create = false;
-	const { user, stories } = $page.data;
+	const { user, stories, scenes } = $page.data;
 
-	const storyOptions = stories.map((story: any) => ({ label: story.title, value: story._id }));
+	const storyOptions = stories
+		? stories.map((story: any) => ({ label: story.title, value: story._id }))
+		: [];
+	const sceneOptions = scenes
+		? scenes.map((scene: any) => ({ label: scene.title, value: scene._id }))
+		: [];
 	let submitLoading = false;
 	export let formData: ISceneForm = {
 		title: '',
 		story: undefined,
+		isRoot: false,
+		prompt: '',
 		creator: user,
 		editors: [],
 		heroImage: '',
 		body: '',
-		endpoints: [],
 		published: false,
 		active: false
 	};
 
-	let { title, story, creator, editors, heroImage, body, endpoints, published, active } = formData;
+	let choices: any;
+	let choice = {
+		scene: '',
+		prompt: ''
+	};
+
+	let { title, story, isRoot, prompt, creator, editors, heroImage, body, published, active } =
+		formData;
 
 	const formError = {
 		title: '',
@@ -44,10 +58,12 @@
 				body: JSON.stringify({
 					title: title, // done
 					story: story,
+					isRoot: isRoot,
+					prompt: prompt,
 					editors: editors,
 					heroImage: heroImage, // done
 					body: body, // done
-					endpoints: endpoints,
+					choices: choices,
 					published: published, // done
 					active: active // done
 				})
@@ -97,9 +113,45 @@
 		<FormTextarea
 			label="Body"
 			name="body"
+			rows={12}
 			bind:value={body}
 			placeholder={PlaceholderKeys.sceneBody}
 		/>
+
+		<div class="flex flex-row gap-5">
+			<div class="form-control w-1/2">
+				<label class="label" for={'choice_1'}>
+					<span class="label-text">Prompt</span>
+				</label>
+				<input
+					type="text"
+					id={'choice_1'}
+					name={'choice_1'}
+					placeholder=""
+					class={`input input-bordered ${formError.title ? 'input-error' : ''} ${
+						submitLoading ? 'disabled' : ''
+					}`}
+					bind:value={choice.prompt}
+					disabled={submitLoading}
+				/>
+			</div>
+			<div class="form-control w-1/2">
+				<label class="label" for={'choice_1'}>
+					<span class="label-text">Prompt</span>
+				</label>
+				<input
+					type="text"
+					id={'choice_1'}
+					name={'choice_1'}
+					placeholder=""
+					class={`input input-bordered ${formError.title ? 'input-error' : ''} ${
+						submitLoading ? 'disabled' : ''
+					}`}
+					bind:value={choice.prompt}
+					disabled={submitLoading}
+				/>
+			</div>
+		</div>
 
 		<FormToggle label="Published" name="published" bind:value={published} />
 		<FormToggle label="Active" name="active" bind:value={active} />

@@ -32,8 +32,11 @@
 							<span class="badge">{user.role}</span>
 						</a>
 					</li>
+					{#if user.roleInfo.level < 4}
+						<li><a href="/admin">Admin</a></li>
+					{/if}
 					<li>
-						<a href={`/setting`}> Setting </a>
+						<a href={`/edit/settings`}> Settings</a>
 					</li>
 					<li><LogoutButton /></li>
 				</ul>

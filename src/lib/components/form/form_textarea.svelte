@@ -3,6 +3,7 @@
 	export let label = '';
 	export let value = '';
 	export let name = '';
+	export let rows = 6;
 	export let placeholder = '';
 </script>
 
@@ -14,6 +15,7 @@
 		id={name}
 		{name}
 		{placeholder}
+		{rows}
 		class={`textarea textarea-bordered ${errorMessage ? 'textarea-error' : ''}`}
 		bind:value
 	/>

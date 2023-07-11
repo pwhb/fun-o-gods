@@ -32,6 +32,7 @@ export const POST: RequestHandler = async ({ request, locals }) =>
 
         const dbRes = await col.insertOne({
             ...body,
+            genres: body.genres ? body.genres.map((genre: string) => new ObjectId(genre)) : [],
             creator: locals.user._id,
             root: body.root ? new ObjectId(body.root) : null,
             createdAt: new Date(),

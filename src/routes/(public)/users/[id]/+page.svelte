@@ -44,7 +44,9 @@
 
 	<div class="join">
 		{#if $page.data.userInfo._id === user._id}
-			<button class="btn btn-xs btn-secondary text-base-100 w-24 join-item">create</button>
+			<a class="btn btn-xs btn-secondary text-base-100 w-24 join-item" href="/create/stories"
+				>create</a
+			>
 		{:else}
 			<button class="btn btn-xs btn-success text-base-100 w-24 join-item">follow</button>
 		{/if}
