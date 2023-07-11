@@ -2,9 +2,10 @@
 	import { page } from '$app/stores';
 
 	import ProfileAvatar from '$lib/components/common/profile_avatar.svelte';
+	import StoryCard from '$lib/components/public/story_card.svelte';
 	import PlaceholderKeys from '$lib/consts/PlaceholderKeys';
 
-	const { user } = $page.data;
+	const { user, stories } = $page.data;
 
 	let editMode = false;
 	let isUploading = false;
@@ -16,6 +17,8 @@
 		avatar = $page.data.userInfo.avatar;
 		bio = $page.data.userInfo.bio;
 	}
+
+	console.log(stories);
 </script>
 
 <div class="text-center my-2">
@@ -56,4 +59,10 @@
 			<button class="btn btn-xs btn-info text-base-100 w-24 join-item">share</button>
 		{/if}
 	</div>
+</div>
+
+<div class="flex flex-col gap-2">
+	{#each stories as story}
+		<StoryCard {story} />
+	{/each}
 </div>

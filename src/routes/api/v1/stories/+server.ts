@@ -34,6 +34,7 @@ export const POST: RequestHandler = async ({ request, locals }) =>
             ...body,
             genres: body.genres ? body.genres.map((genre: string) => new ObjectId(genre)) : [],
             creator: locals.user._id,
+            active: true,
             root: body.root ? new ObjectId(body.root) : null,
             createdAt: new Date(),
             updatedAt: new Date(),

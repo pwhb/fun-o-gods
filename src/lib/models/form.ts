@@ -49,7 +49,7 @@ export interface IStoryForm
     description?: string;
     root?: string;
     published: boolean;
-    active: boolean;
+    active?: boolean;
 }
 
 export interface ISceneForm

@@ -2,4 +2,4 @@
 	import StoryEditor from '$lib/components/public/story_editor.svelte';
 </script>
 
-<StoryEditor />
+<StoryEditor create={true} />

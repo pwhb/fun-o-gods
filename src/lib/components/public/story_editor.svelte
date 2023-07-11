@@ -3,10 +3,19 @@
 	import { page } from '$app/stores';
 	import Avatar from '$lib/components/common/avatar.svelte';
 	import CardWrapper from '$lib/components/wrappers/card_wrapper.svelte';
+	import type { IStoryForm } from '$lib/models/form';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { MultiSelect } from 'svelte-multiselect';
 
-	// export let create = false;
+	export let create = false;
+	export let story: IStoryForm = {
+		title: '',
+		heroImage: '',
+		description: '',
+		published: false,
+		root: '',
+		genres: []
+	};
 	const { user } = $page.data;
 
 	const genreOptions = $page.data.genres.map((genre: any) => ({
@@ -17,22 +26,18 @@
 	const key = (opt: any) => opt.value;
 
 	let submitLoading = false;
-	let genres: any = [];
-	let title = '';
+	let { title, heroImage, description, published, active, root } = story;
+	let genres: any = story.genres
+		? story.genres.map((v: any) => ({ label: v.label, value: v._id }))
+		: [];
 	let editors: any = [];
-	let heroImage = '';
-	let description = '';
-	let root = '';
-	let published = false;
-	let active = false;
-
 	async function onSubmit() {
 		submitLoading = true;
 		try {
-			const url = `/api/v1/stories`;
+			const url = create ? `/api/v1/stories` : `/api/v1/stories/${story._id}`;
 
 			const options = {
-				method: 'POST',
+				method: create ? 'POST' : 'PATCH',
 				body: JSON.stringify({
 					title,
 					editors,
@@ -40,17 +45,16 @@
 					heroImage,
 					description,
 					root,
-					published,
-					active
+					published
 				})
 			};
 			const res = await fetch(url, options);
 			const data = await res.json();
 			if (data.success) {
-				toast.push('Successfully Created!', {
+				toast.push(create ? 'Successfully Created!' : 'Successfully Updated!', {
 					classes: ['info']
 				});
-				goto(`/stories/${data.data.insertedId}`);
+				goto(create ? `/stories/${data.data.insertedId}` : `/stories/${story._id}`);
 			} else {
 				toast.push(data.error && data.error.message ? data.error.message : 'Failed.', {
 					classes: ['warn']
@@ -100,16 +104,18 @@
 		/>
 		<div class="form-control w-full my-3">
 			<label class="label cursor-pointer">
-				<span class="label-text">Active</span>
+				<span class="label-text">Published</span>
 				<input
 					type="checkbox"
 					class="toggle toggle-info"
-					id="active"
-					name="active"
-					bind:checked={active}
+					id="published"
+					name="published"
+					bind:checked={published}
 				/>
 			</label>
 		</div>
-		<button class="btn btn-success text-base-100 btn-sm w-full" type="submit">Create</button>
+		<button class="btn btn-success text-base-100 btn-sm w-full" type="submit"
+			>{create ? 'create' : 'save'}</button
+		>
 	</form>
 </CardWrapper>
