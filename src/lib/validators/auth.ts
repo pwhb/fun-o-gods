@@ -5,6 +5,13 @@ interface IAuthPayload
     confirmPassword?: FormDataEntryValue;
 }
 
+interface IChangePasswordPayload
+{
+
+    newPassword: FormDataEntryValue;
+    confirmPassword: FormDataEntryValue;
+}
+
 export function validateLogin({ username, password }: IAuthPayload)
 {
     let ok = true;
@@ -19,6 +26,34 @@ export function validateLogin({ username, password }: IAuthPayload)
     {
         ok = false;
         invalid.password = 'password cannot be empty';
+    }
+
+    return {
+        ok: ok,
+        invalid: invalid,
+        previous: previous
+    };
+}
+
+export function validateChangePassword({ newPassword, confirmPassword }: IChangePasswordPayload)
+{
+    let ok = true;
+    const invalid = { newPassword: '', confirmPassword: '', password: "" };
+    const previous = { newPassword };
+    if (!newPassword)
+    {
+        ok = false;
+        invalid.newPassword = 'password cannot be empty';
+    }
+    if (!confirmPassword)
+    {
+        ok = false;
+        invalid.confirmPassword = 'password cannot be empty';
+    }
+    if (newPassword !== confirmPassword)
+    {
+        ok = false;
+        invalid.confirmPassword = 'passwords do not match';
     }
 
     return {

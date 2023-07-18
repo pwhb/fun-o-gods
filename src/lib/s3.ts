@@ -38,7 +38,7 @@ export async function upload({ Key, Body, ContentType, }: IUploadOptions)
         return response;
     } catch (e)
     {
-        console.log(e);
+        console.error(e);
         return null;
     }
 };
@@ -55,7 +55,7 @@ export async function list(MaxKeys?: number)
         return response;
     } catch (e)
     {
-        console.log(e);
+        console.error(e);
         return null;
     }
 };
@@ -72,7 +72,7 @@ export async function get(Key: string)
         return response;
     } catch (e)
     {
-        console.log(e);
+        console.error(e);
         return null;
     }
 };
@@ -89,7 +89,7 @@ export async function remove(Key: string)
         return response;
     } catch (e)
     {
-        console.log(e);
+        console.error(e);
         return null;
     }
 };

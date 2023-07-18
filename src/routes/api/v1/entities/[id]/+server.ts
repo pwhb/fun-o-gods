@@ -29,7 +29,7 @@ export const GET: RequestHandler = async ({ params }) =>
     }
 };
 
-export const PUT: RequestHandler = async ({ request, params }) =>
+export const PATCH: RequestHandler = async ({ request, params }) =>
 {
     try
     {

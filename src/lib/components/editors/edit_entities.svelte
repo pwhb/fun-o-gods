@@ -38,7 +38,7 @@
 		try {
 			const url = `/api/v1/entities${create ? '' : `/${formData._id}`}`;
 			const options = {
-				method: create ? 'POST' : 'PUT',
+				method: create ? 'POST' : 'PATCH',
 				body: JSON.stringify({
 					name: name,
 					icon: icon,
@@ -65,7 +65,7 @@
 	}
 </script>
 
-<div class="md:mx-40">
+<div class="md:max-w-2xl mx-auto">
 	<form on:submit={onSubmit}>
 		<FormInput
 			name="name"

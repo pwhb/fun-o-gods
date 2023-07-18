@@ -2,6 +2,7 @@
 	import FileDrop from 'filedrop-svelte';
 	import type { Files } from 'filedrop-svelte';
 	import { toast } from '@zerodevx/svelte-toast';
+	import { upload } from '$lib/api/common';
 	let files: Files;
 	export let label = 'Upload files';
 	export let loading = false;
@@ -11,15 +12,7 @@
 	let urls: any = [];
 	const handleUpload = async (file: any) => {
 		loading = true;
-		const formData = new FormData();
-		formData.append('file', file);
-		const url = '/api/v1/uploads';
-		const res = await fetch(url, {
-			method: 'POST',
-			body: formData
-		});
-
-		const data = await res.json();
+		const data = await upload(file);
 		loading = false;
 		return data;
 	};
@@ -39,15 +32,22 @@
 	};
 </script>
 
-<div class="max-w-xs mx-auto">
+<div class="mx-auto">
 	{#if loading}
-		<p>Loading...</p>
+		<div
+			class="p-5 border-2 border-dashed border-primary shadow-md rounded-xl bg-base-500 text-center"
+		>
+			<div class="loading w-12" />
+			<p class="text-neutral-500">Uploading ...</p>
+		</div>
 	{:else}
 		<FileDrop on:filedrop={handleDrop}>
-			<div class="p-5 border-2 border-dashed border-primary shadow-md rounded-xl bg-base-500">
-				<div class="flex flex-col items-center gap-5">
-					<img src="https://www.svgrepo.com/show/449957/upload.svg" class="w-10" alt="" />
-					<span class="font-light text-gray-400">{label}</span>
+			<div
+				class="p-3 md:p-5 border-2 border-dashed border-primary shadow-md rounded-xl bg-base-500"
+			>
+				<div class="flex flex-col items-center md:gap-5 gap-2">
+					<img src="https://www.svgrepo.com/show/449957/upload.svg" class="md:w-10 w-4" alt="" />
+					<span class="font-light text-xs md:text-sm text-gray-400">{label}</span>
 				</div>
 			</div>
 		</FileDrop>

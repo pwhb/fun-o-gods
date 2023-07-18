@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ locals }) =>
 {
     if (locals.user)
     {
-        throw redirect(302, "/admin");
+        throw redirect(302, "/");
     }
 
 };
@@ -40,7 +40,7 @@ const register: Action = async ({ request, cookies }) =>
     await col.insertOne({
         username,
         password: hashedPassword,
-        role: "user",
+        role: "guest",
         activated: false,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -59,7 +59,7 @@ const register: Action = async ({ request, cookies }) =>
     //     maxAge: 60 * 60 * 24 // 1 day
     // });
 
-    throw redirect(303, '/home');
+    throw redirect(303, '/');
 };
 
 export const actions: Actions = {

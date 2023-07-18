@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import Avatar from '../common/avatar.svelte';
 	import LogoutButton from '../common/logout_button.svelte';
-	import Icon from '@iconify/svelte';
 	const { user, publicConfig } = $page.data;
 </script>
 
@@ -17,28 +17,32 @@
 				<!-- svelte-ignore a11y-label-has-associated-control -->
 				<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 				<label tabindex="0" class="btn btn-ghost btn-circle avatar">
-					<div class="avatar placeholder">
-						<div class="bg-primary text-neutral-content rounded-full w-8">
-							<span class="text-sm">K</span>
-						</div>
-					</div>
+					<Avatar {user} />
 				</label>
 				<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 				<ul
 					tabindex="0"
-					class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-32"
+					class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box"
 				>
 					<li>
-						<a class="justify-between" href="/hello">
-							{user.username}
+						<a class="justify-between" href={`/users/${user.username}`}>
+							<span class="font-semibold">
+								@{user.username}
+							</span>
 							<span class="badge">{user.role}</span>
 						</a>
+					</li>
+					{#if user.roleInfo.level < 4}
+						<li><a href="/admin">Admin</a></li>
+					{/if}
+					<li>
+						<a href={`/edit/settings`}> Settings</a>
 					</li>
 					<li><LogoutButton /></li>
 				</ul>
 			</div>
 		{:else}
-			<button class="btn btn-primary btn-xs">Log in</button>
+			<a class="btn btn-primary btn-xs" href="/auth/login">Log in</a>
 		{/if}
 	</div>
 </div>

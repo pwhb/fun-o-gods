@@ -25,10 +25,9 @@
 	async function onSubmit() {
 		submitLoading = true;
 		try {
-			console.log({ formData, data: 'hello' });
 			const url = `/api/v1/roles${create ? '' : `/${formData._id}`}`;
 			const options = {
-				method: create ? 'POST' : 'PUT',
+				method: create ? 'POST' : 'PATCH',
 				body: JSON.stringify({
 					name: name,
 					level: level,
@@ -55,7 +54,7 @@
 	}
 </script>
 
-<div class="md:mx-40">
+<div class="md:max-w-2xl mx-auto">
 	<form on:submit={onSubmit}>
 		<FormInput
 			name="name"

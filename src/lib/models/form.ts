@@ -1,4 +1,5 @@
 import type { ObjectId } from "mongodb";
+import type { IUser } from "./user";
 
 export interface IUserForm
 {
@@ -16,7 +17,7 @@ export interface IRoleForm
     active: boolean;
 }
 
-export interface IGenresForm
+export interface IGenreForm
 {
     _id?: ObjectId,
     label: string;
@@ -36,3 +37,36 @@ export interface IEntityForm extends IConfigForm
 {
     icon: string;
 }
+
+export interface IStoryForm
+{
+    _id?: ObjectId,
+    title: string;
+    creator?: IUser;
+    editors?: [ObjectId?];
+    genres?: any;
+    heroImage?: string;
+    description?: string;
+    root?: string;
+    published: boolean;
+    active?: boolean;
+}
+
+export interface ISceneForm
+{
+    _id?: ObjectId,
+    title: string;
+    isRoot: boolean;
+    prompt?: string;
+    story?: string;
+    creator?: IUser;
+    editors?: [ObjectId?];
+    heroImage?: string;
+    body?: string;
+    endpoints?: any;
+    published: boolean;
+    active: boolean;
+}
+
+
+

@@ -4,7 +4,7 @@ import clientPromise from "$lib/mongodb";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { ObjectId } from "mongodb";
 
-export const PUT: RequestHandler = async ({ request, params, locals }) =>
+export const PATCH: RequestHandler = async ({ request, params, locals }) =>
 {
     try
     {
@@ -13,11 +13,23 @@ export const PUT: RequestHandler = async ({ request, params, locals }) =>
         const client = await clientPromise;
         const col = client.db(DB_NAME).collection(DBKeys.UserCollection);
 
+        if (body.username)
+        {
+            const alreadyExists = await col.findOne({ username: body.username });
+
+            if (alreadyExists && alreadyExists._id.toString() !== id)
+            {
+                return json({
+                    success: false, error: {
+                        message: "username is already taken",
+                    }
+                }, { status: 400 });
+            }
+        }
+
         const dbRes = await col.updateOne({ _id: new ObjectId(id) }, {
             $set: {
-                username: body.username,
-                role: body.role,
-                active: body.active,
+                ...body,
                 updatedAt: new Date(),
             }
         });

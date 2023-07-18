@@ -4,7 +4,7 @@ import type { Action, Actions } from "./$types";
 const logout: Action = async ({ cookies }) =>
 {
     cookies.delete("token");
-    throw redirect(302, '/home');
+    throw redirect(302, '/');
 };
 
 export const actions: Actions = {
