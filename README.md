@@ -1,3 +1,3 @@
-# fun-o-gods (staging branch)
+# fun-o-gods (prod branch)
 
-[https://fun-o-gods-git-staging-pwhb.vercel.app](https://fun-o-gods-git-staging-pwhb.vercel.app)
+[https://fun-o-gods.vercel.app](https://fun-o-gods.vercel.app)
